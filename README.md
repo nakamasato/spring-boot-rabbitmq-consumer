@@ -15,7 +15,14 @@ This application simply consumes RabbitMQ messages.
 1. Run
 
     ```
-    docker-compose up
+    docker-compose up --build
+    ```
+
+1. Produce a RabbitMQ message
+
+    ```
+    docker exec -it $(docker ps | grep spring-boot-rabbitmq-consumer_rabbitmq_1 | awk '{print $1}') rabbitmqadmin publish exchange="spring-boot-exchange" routing_key="foo.bar.baz" payload="hello, world"
+    Message published
     ```
 
 ### local Java
@@ -26,7 +33,7 @@ This application simply consumes RabbitMQ messages.
     docker-compose up rabbitmq
     ```
 
-1. Run
+1. Run (need to privde environment variables)
 
     ```
     ./gradlew bootRun

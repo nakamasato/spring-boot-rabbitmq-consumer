@@ -15,7 +15,6 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 public class SpringBootRabbitmqConsumerApplication {
 
-
 	static final String topicExchangeName = "spring-boot-exchange";
 
 	static final String queueName = "spring-boot";
@@ -35,12 +34,12 @@ public class SpringBootRabbitmqConsumerApplication {
 		return BindingBuilder.bind(queue).to(exchange).with("foo.bar.#");
 	}
 
-
 	@Bean
-	SimpleMessageListenerContainer container(MessageListenerAdapter listenerAdapter) {
+	SimpleMessageListenerContainer container(CachingConnectionFactory cachingConnectionFactory, MessageListenerAdapter listenerAdapter) {
 		SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
-		container.setConnectionFactory(rabbitConnectionFactory());
-
+		container.setConnectionFactory(cachingConnectionFactory);
+		container.setQueueNames(queueName);
+	    container.setMessageListener(listenerAdapter);
 		return container;
 	}
 
